@@ -11,7 +11,7 @@ The idea comes from https://github.com/b4b4r07/ultimate but this provides more s
 - Super fast, super minimal
 - Supports left prompt (PROMPT), right prompt (RPROMPT)
 - Supports various path styles
-  - It can be changed by `PROMPT_PATH_STYLE`. It accests:
+  - It can be changed by `PROMPT_PATH_STYLE`. It accepts:
     - `default` (means no right prompt used)
     - `minimal`
     - `shortpath`
