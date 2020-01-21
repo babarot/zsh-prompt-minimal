@@ -1,8 +1,10 @@
 # minimal.zsh-theme
 
-Super fast, super minimal.
+<img src="screenshots/default.png" width="400">
 
-![](./screenshots/default.png)
+Less is more, so super fast, minimal and no dissatisfaction!
+
+The idea comes from https://github.com/b4b4r07/ultimate but this provides more simple.
 
 ## Features
 
@@ -27,3 +29,4 @@ Super fast, super minimal.
 ## License
 
 MIT
+
