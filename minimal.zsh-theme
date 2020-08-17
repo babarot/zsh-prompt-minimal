@@ -108,7 +108,7 @@ prompt-disable() {
     RPROMPT=
 }
 
-main() {
+__prompt_main() {
     # Allow for functions in the prompt.
     setopt PROMPT_SUBST
     # Hide old prompt
@@ -116,4 +116,4 @@ main() {
     prompt-enable
 }
 
-main
+__prompt_main
