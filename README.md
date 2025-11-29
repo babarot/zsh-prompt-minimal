@@ -60,7 +60,7 @@ Customize your prompt layout using templates with placeholders:
 
 ```zsh
 zstyle ':prompt:minimal:left' template '%sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %path% %git%'
+zstyle ':prompt:minimal:right' template '%exitcode% %path% (%git%)'
 ```
 
 #### Available Placeholders
@@ -98,8 +98,10 @@ The theme includes git-prompt.sh for displaying git repository information.
 #### Basic Git Configuration
 
 ```zsh
-# Change git format
-zstyle ':prompt:minimal:git' format ' [%s]'
+# Customize git display in template (use any format you want)
+zstyle ':prompt:minimal:right' template '%exitcode% %path% [%git%]'
+# or
+zstyle ':prompt:minimal:left' template '%git% %sign% '
 
 # Enable detailed git status
 zstyle ':prompt:minimal:git' show-dirty true
@@ -192,8 +194,7 @@ Color values can be:
 
 ```zsh
 zstyle ':prompt:minimal:left' template '%sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %F{blue}%path%%f %F{242}%git%%f'
-zstyle ':prompt:minimal:git' format ' (%s)'
+zstyle ':prompt:minimal:right' template '%exitcode% %F{blue}%path%%f %F{242}(%git%)%f'
 zstyle ':prompt:minimal:git' show-dirty true
 zstyle ':prompt:minimal:git' show-untracked true
 zstyle ':prompt:minimal:git' show-upstream true
@@ -206,10 +207,9 @@ zstyle ':prompt:minimal:git' show-upstream true
 | Context | Key | Type | Default | Description |
 |---------|-----|------|---------|-------------|
 | `:prompt:minimal:left` | `template` | string | `%sign% ` | Left prompt template |
-| `:prompt:minimal:right` | `template` | string | `%exitcode% %path% %git%` | Right prompt template |
+| `:prompt:minimal:right` | `template` | string | `%exitcode% %path% (%git%)` | Right prompt template |
 | `:prompt:minimal:path` | `style` | string | `minimal` | Path display style |
 | `:prompt:minimal:sign` | `char` | string | `$` | Prompt sign character |
-| `:prompt:minimal:git` | `format` | string | ` (%s)` | Git info format string |
 | `:prompt:minimal:git` | `show-dirty` | boolean | `false` | Show dirty state |
 | `:prompt:minimal:git` | `show-untracked` | boolean | `false` | Show untracked files |
 | `:prompt:minimal:git` | `show-stash` | boolean | `false` | Show stash state |
