@@ -5,10 +5,51 @@ if [[ -f "${0:A:h}/git-prompt.sh" ]]; then
     source "${0:A:h}/git-prompt.sh"
 fi
 
-declare -g PROMPT_PATH_STYLE=${PROMPT_PATH_STYLE:-"minimal"}
-declare -g PROMPT_SIGN=${PROMPT_SIGN:-"$"}
-declare -g PROMPT_USE_VIM_MODE=${PROMPT_USE_VIM_MODE:-false}
-declare -g PROMPT_GIT_POSITION=${PROMPT_GIT_POSITION:-"right"} # "left", "right", or "none"
+# ======================================================================
+# zstyle Configuration
+# ======================================================================
+
+# Helper function to get zstyle value with fallback
+__prompt_zstyle() {
+    local context="$1"
+    local key="$2"
+    local default="$3"
+    local result
+
+    zstyle -s ":prompt:minimal:${context}" "${key}" result || result="${default}"
+    echo "${result}"
+}
+
+# Helper function to get zstyle boolean value
+__prompt_zstyle_bool() {
+    local context="$1"
+    local key="$2"
+    local default="$3"
+    local result
+
+    zstyle -t ":prompt:minimal:${context}" "${key}" 2>/dev/null && result="true" || result="${default}"
+    echo "${result}"
+}
+
+# Set default zstyle values if not already set
+zstyle -s ':prompt:minimal:left' template _ || zstyle ':prompt:minimal:left' template '%sign% '
+zstyle -s ':prompt:minimal:right' template _ || zstyle ':prompt:minimal:right' template '%exitcode% %path% %git%'
+zstyle -s ':prompt:minimal:path' style _ || zstyle ':prompt:minimal:path' style 'minimal'
+zstyle -s ':prompt:minimal:sign' char _ || zstyle ':prompt:minimal:sign' char '$'
+zstyle -s ':prompt:minimal:git' format _ || zstyle ':prompt:minimal:git' format ' (%s)'
+zstyle -t ':prompt:minimal:vimode' enable 2>/dev/null || zstyle ':prompt:minimal:vimode' enable false
+
+# Backward compatibility: support old environment variables
+# These will override zstyle if set
+if [[ -n "${PROMPT_PATH_STYLE}" ]]; then
+    zstyle ':prompt:minimal:path' style "${PROMPT_PATH_STYLE}"
+fi
+if [[ -n "${PROMPT_SIGN}" ]]; then
+    zstyle ':prompt:minimal:sign' char "${PROMPT_SIGN}"
+fi
+if [[ -n "${PROMPT_USE_VIM_MODE}" ]] && [[ "${PROMPT_USE_VIM_MODE}" == "true" ]]; then
+    zstyle ':prompt:minimal:vimode' enable true
+fi
 
 __shorten_path() {
     setopt localoptions noksharrays extendedglob
@@ -19,8 +60,9 @@ __shorten_path() {
 
 __prompt_path() {
     local cwd
+    local path_style="$(__prompt_zstyle "path" "style" "minimal")"
 
-    case "${PROMPT_PATH_STYLE}" in
+    case "${path_style}" in
         "fullpath")
             cwd="$(print -D "${PWD}")"
             ;;
@@ -50,8 +92,25 @@ __prompt_git() {
         return 0
     fi
 
+    # Configure git-prompt.sh behavior from zstyle
+    if zstyle -t ':prompt:minimal:git' show-dirty 2>/dev/null; then
+        export GIT_PS1_SHOWDIRTYSTATE=1
+    fi
+    if zstyle -t ':prompt:minimal:git' show-untracked 2>/dev/null; then
+        export GIT_PS1_SHOWUNTRACKEDFILES=1
+    fi
+    if zstyle -t ':prompt:minimal:git' show-stash 2>/dev/null; then
+        export GIT_PS1_SHOWSTASHSTATE=1
+    fi
+    if zstyle -t ':prompt:minimal:git' show-upstream 2>/dev/null; then
+        export GIT_PS1_SHOWUPSTREAM="auto"
+    fi
+
+    # Get git format from zstyle
+    local git_format="$(__prompt_zstyle "git" "format" " (%s)")"
+
     # Call __git_ps1 with formatting
-    local git_info="$(__git_ps1 ' (%s)')"
+    local git_info="$(__git_ps1 "${git_format}")"
     if [[ -n "${git_info}" ]]; then
         echo "${git_info}"
     fi
@@ -96,7 +155,8 @@ zle -N zle-keymap-select
 __vim_mode() {
     local sign=${1}
     if [[ -z ${sign} ]]; then
-        echo "${PROMPT_SIGN}"
+        local default_sign="$(__prompt_zstyle "sign" "char" "$")"
+        echo "${default_sign}"
         return 0
     fi
     if [[ ${sign} == "%" ]]; then
@@ -107,37 +167,39 @@ __vim_mode() {
     echo "${vim_mode_color}${sign}${reset_prompt_color}"
 }
 
-__prompt_run() {
-    local prompt
-    prompt="${PROMPT_SIGN}"
+__prompt_sign() {
+    local sign="$(__prompt_zstyle "sign" "char" "$")"
+    local vimode_enable="$(__prompt_zstyle_bool "vimode" "enable" "false")"
 
-    if ${PROMPT_USE_VIM_MODE:-false}; then
-        prompt="$(__vim_mode ${PROMPT_SIGN})"
+    if [[ "${vimode_enable}" == "true" ]]; then
+        echo "$(__vim_mode "${sign}")"
+    else
+        echo "${sign}"
     fi
+}
 
-    echo "${prompt}"
+# Parse template and replace placeholders
+__prompt_parse_template() {
+    local template="$1"
+    local result="${template}"
+
+    # Replace placeholders with actual values
+    result="${result//\%sign\%/\$(__prompt_sign)}"
+    result="${result//\%git\%/\$(__prompt_git)}"
+    result="${result//\%path\%/\$(__prompt_path)}"
+    result="${result//\%exitcode\%/\$(__prompt_exitcode)}"
+
+    echo "${result}"
 }
 
 prompt-enable() {
-    case "${PROMPT_GIT_POSITION}" in
-        "left")
-            PROMPT='$(__prompt_run)$(__prompt_git) '
-            RPROMPT='$(__prompt_exitcode) $(__prompt_path)'
-            ;;
-        "right")
-            PROMPT='$(__prompt_run) '
-            RPROMPT='$(__prompt_exitcode) $(__prompt_path)$(__prompt_git)'
-            ;;
-        "none")
-            PROMPT='$(__prompt_run) '
-            RPROMPT='$(__prompt_exitcode) $(__prompt_path)'
-            ;;
-        *)
-            # Default to right
-            PROMPT='$(__prompt_run) '
-            RPROMPT='$(__prompt_exitcode) $(__prompt_path)$(__prompt_git)'
-            ;;
-    esac
+    # Get templates from zstyle
+    local left_template="$(__prompt_zstyle "left" "template" "%sign% ")"
+    local right_template="$(__prompt_zstyle "right" "template" "%exitcode% %path% %git%")"
+
+    # Parse templates and set prompts
+    PROMPT="$(__prompt_parse_template "${left_template}")"
+    RPROMPT="$(__prompt_parse_template "${right_template}")"
 }
 
 prompt-disable() {
