@@ -1,8 +1,14 @@
 #!/bin/zsh
 
+# Load git-prompt.sh if it exists
+if [[ -f "${0:A:h}/git-prompt.sh" ]]; then
+    source "${0:A:h}/git-prompt.sh"
+fi
+
 declare -g PROMPT_PATH_STYLE=${PROMPT_PATH_STYLE:-"minimal"}
 declare -g PROMPT_SIGN=${PROMPT_SIGN:-"$"}
 declare -g PROMPT_USE_VIM_MODE=${PROMPT_USE_VIM_MODE:-false}
+declare -g PROMPT_GIT_POSITION=${PROMPT_GIT_POSITION:-"right"} # "left", "right", or "none"
 
 __shorten_path() {
     setopt localoptions noksharrays extendedglob
@@ -36,6 +42,19 @@ __prompt_exitcode() {
     local OFF_COLOR="%{${reset_color}%}"
     local ERR_COLOR="%{${fg[red]}%}"
     echo "%(?..${ERR_COLOR}%? ⏎  ) ${OFF_COLOR}"
+}
+
+__prompt_git() {
+    # Check if __git_ps1 function exists (git-prompt.sh loaded)
+    if ! type __git_ps1 &>/dev/null; then
+        return 0
+    fi
+
+    # Call __git_ps1 with formatting
+    local git_info="$(__git_ps1 ' (%s)')"
+    if [[ -n "${git_info}" ]]; then
+        echo "${git_info}"
+    fi
 }
 
 vim_mode_color=""
@@ -100,8 +119,25 @@ __prompt_run() {
 }
 
 prompt-enable() {
-    PROMPT='$(__prompt_run) '
-    RPROMPT='$(__prompt_exitcode) $(__prompt_path)'
+    case "${PROMPT_GIT_POSITION}" in
+        "left")
+            PROMPT='$(__prompt_run)$(__prompt_git) '
+            RPROMPT='$(__prompt_exitcode) $(__prompt_path)'
+            ;;
+        "right")
+            PROMPT='$(__prompt_run) '
+            RPROMPT='$(__prompt_exitcode) $(__prompt_path)$(__prompt_git)'
+            ;;
+        "none")
+            PROMPT='$(__prompt_run) '
+            RPROMPT='$(__prompt_exitcode) $(__prompt_path)'
+            ;;
+        *)
+            # Default to right
+            PROMPT='$(__prompt_run) '
+            RPROMPT='$(__prompt_exitcode) $(__prompt_path)$(__prompt_git)'
+            ;;
+    esac
 }
 
 prompt-disable() {
