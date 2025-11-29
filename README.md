@@ -1,8 +1,8 @@
-# minimal.zsh-theme
+# za-prompt
 
-A fast, minimal, and highly customizable zsh prompt theme.
+⚡ A fast, minimal, and highly customizable zsh prompt theme.
 
-**Less is more** - Super fast, super minimal, and no dissatisfaction!
+Super fast, super minimal, and no dissatisfaction!
 
 ## Features
 
@@ -21,24 +21,24 @@ A fast, minimal, and highly customizable zsh prompt theme.
 Clone this repository and source the theme file:
 
 ```zsh
-git clone https://github.com/babarot/zsh-prompt-minimal.git
-echo "source /path/to/zsh-prompt-minimal/minimal.zsh-theme" >> ~/.zshrc
+git clone https://github.com/babarot/za-prompt.git
+echo "source /path/to/za-prompt/za-prompt.zsh-theme" >> ~/.zshrc
 ```
 
 ### With [afx](https://github.com/babarot/afx/)
 
 ```yaml
-- name: babarot/zsh-prompt-minimal
-  description: Super super super minimal prompt for zsh
+- name: babarot/za-prompt
+  description: Super fast zsh prompt (Za = Zsh Alternative / Zap)
   owner: babarot
-  repo: zsh-prompt-minimal
+  repo: za-prompt
   plugin:
     sources:
     - '*.zsh-theme'
     snippet-prepare: |
-      zstyle ':prompt:minimal:path' style 'minimal'
-      zstyle ':prompt:minimal:right' template '%exitcode% %F{242}%git%%f %path%'
-      zstyle ':prompt:minimal:left' template '%sign% '
+      zstyle ':prompt:za:path' style 'minimal'
+      zstyle ':prompt:za:right' template '%exitcode% %F{242}(%git%)%f %path%'
+      zstyle ':prompt:za:left' template '%sign% '
 ```
 
 ## Configuration
@@ -51,7 +51,7 @@ The default configuration provides a clean prompt with minimal information:
 
 ```zsh
 # Default: Left prompt shows $, right prompt shows exit code, path, and git info
-source minimal.zsh-theme
+source za-prompt.zsh-theme
 ```
 
 ### Template System
@@ -59,8 +59,8 @@ source minimal.zsh-theme
 Customize your prompt layout using templates with placeholders:
 
 ```zsh
-zstyle ':prompt:minimal:left' template '%sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %path% (%git%)'
+zstyle ':prompt:za:left' template '%sign% '
+zstyle ':prompt:za:right' template '%exitcode% %path% (%git%)'
 ```
 
 #### Available Placeholders
@@ -75,7 +75,7 @@ zstyle ':prompt:minimal:right' template '%exitcode% %path% (%git%)'
 Configure how the path is displayed:
 
 ```zsh
-zstyle ':prompt:minimal:path' style 'minimal'
+zstyle ':prompt:za:path' style 'minimal'
 ```
 
 Available styles:
@@ -88,7 +88,7 @@ Available styles:
 Change the prompt character:
 
 ```zsh
-zstyle ':prompt:minimal:sign' char '>'
+zstyle ':prompt:za:sign' char '>'
 ```
 
 ### Git Integration
@@ -99,15 +99,15 @@ The theme includes git-prompt.sh for displaying git repository information.
 
 ```zsh
 # Customize git display in template (use any format you want)
-zstyle ':prompt:minimal:right' template '%exitcode% %path% [%git%]'
+zstyle ':prompt:za:right' template '%exitcode% %path% [%git%]'
 # or
-zstyle ':prompt:minimal:left' template '%git% %sign% '
+zstyle ':prompt:za:left' template '%git% %sign% '
 
 # Enable detailed git status
-zstyle ':prompt:minimal:git' show-dirty true
-zstyle ':prompt:minimal:git' show-untracked true
-zstyle ':prompt:minimal:git' show-stash true
-zstyle ':prompt:minimal:git' show-upstream true
+zstyle ':prompt:za:git' show-dirty true
+zstyle ':prompt:za:git' show-untracked true
+zstyle ':prompt:za:git' show-stash true
+zstyle ':prompt:za:git' show-upstream true
 ```
 
 Git status indicators (when enabled):
@@ -124,7 +124,7 @@ Git status indicators (when enabled):
 Enable vi mode indicator:
 
 ```zsh
-zstyle ':prompt:minimal:vimode' enable true
+zstyle ':prompt:za:vimode' enable true
 ```
 
 The prompt sign will change color based on the current vim mode:
@@ -138,30 +138,30 @@ The prompt sign will change color based on the current vim mode:
 ### Example 1: Classic Style `[$ minimal (git)]`
 
 ```zsh
-zstyle ':prompt:minimal:left' template '[%sign% %path% %git%] '
-zstyle ':prompt:minimal:right' template '%exitcode%'
+zstyle ':prompt:za:left' template '[%sign% %path% %git%] '
+zstyle ':prompt:za:right' template '%exitcode%'
 ```
 
 ### Example 2: Git First `[(git) $ shortpath]`
 
 ```zsh
-zstyle ':prompt:minimal:left' template '%git% %sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %path%'
-zstyle ':prompt:minimal:path' style 'shortpath'
+zstyle ':prompt:za:left' template '%git% %sign% '
+zstyle ':prompt:za:right' template '%exitcode% %path%'
+zstyle ':prompt:za:path' style 'shortpath'
 ```
 
 ### Example 3: Everything on Left
 
 ```zsh
-zstyle ':prompt:minimal:left' template '%sign% %path% %git% '
-zstyle ':prompt:minimal:right' template ''
+zstyle ':prompt:za:left' template '%sign% %path% %git% '
+zstyle ':prompt:za:right' template ''
 ```
 
 ### Example 4: No Git Information
 
 ```zsh
-zstyle ':prompt:minimal:left' template '%sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %path%'
+zstyle ':prompt:za:left' template '%sign% '
+zstyle ':prompt:za:right' template '%exitcode% %path%'
 ```
 
 ### Example 5: Custom Colors
@@ -170,13 +170,13 @@ Use zsh color sequences directly in templates:
 
 ```zsh
 # Dark gray git info
-zstyle ':prompt:minimal:right' template '%exitcode% %path% %F{242}%git%%f'
+zstyle ':prompt:za:right' template '%exitcode% %path% %F{242}%git%%f'
 
 # Blue path, gray git
-zstyle ':prompt:minimal:right' template '%exitcode% %F{blue}%path%%f %F{8}%git%%f'
+zstyle ':prompt:za:right' template '%exitcode% %F{blue}%path%%f %F{8}%git%%f'
 
 # Custom sign with color
-zstyle ':prompt:minimal:left' template '%F{green}%sign%%f '
+zstyle ':prompt:za:left' template '%F{green}%sign%%f '
 ```
 
 Color specification:
@@ -193,11 +193,11 @@ Color values can be:
 ### Example 6: Full Git Status with Colors
 
 ```zsh
-zstyle ':prompt:minimal:left' template '%sign% '
-zstyle ':prompt:minimal:right' template '%exitcode% %F{blue}%path%%f %F{242}(%git%)%f'
-zstyle ':prompt:minimal:git' show-dirty true
-zstyle ':prompt:minimal:git' show-untracked true
-zstyle ':prompt:minimal:git' show-upstream true
+zstyle ':prompt:za:left' template '%sign% '
+zstyle ':prompt:za:right' template '%exitcode% %F{blue}%path%%f %F{242}(%git%)%f'
+zstyle ':prompt:za:git' show-dirty true
+zstyle ':prompt:za:git' show-untracked true
+zstyle ':prompt:za:git' show-upstream true
 ```
 
 ## Configuration Reference
@@ -206,15 +206,15 @@ zstyle ':prompt:minimal:git' show-upstream true
 
 | Context | Key | Type | Default | Description |
 |---------|-----|------|---------|-------------|
-| `:prompt:minimal:left` | `template` | string | `%sign% ` | Left prompt template |
-| `:prompt:minimal:right` | `template` | string | `%exitcode% %path% (%git%)` | Right prompt template |
-| `:prompt:minimal:path` | `style` | string | `minimal` | Path display style |
-| `:prompt:minimal:sign` | `char` | string | `$` | Prompt sign character |
-| `:prompt:minimal:git` | `show-dirty` | boolean | `false` | Show dirty state |
-| `:prompt:minimal:git` | `show-untracked` | boolean | `false` | Show untracked files |
-| `:prompt:minimal:git` | `show-stash` | boolean | `false` | Show stash state |
-| `:prompt:minimal:git` | `show-upstream` | boolean | `false` | Show upstream state |
-| `:prompt:minimal:vimode` | `enable` | boolean | `false` | Enable vi mode indicator |
+| `:prompt:za:left` | `template` | string | `%sign% ` | Left prompt template |
+| `:prompt:za:right` | `template` | string | `%exitcode% %path% (%git%)` | Right prompt template |
+| `:prompt:za:path` | `style` | string | `minimal` | Path display style |
+| `:prompt:za:sign` | `char` | string | `$` | Prompt sign character |
+| `:prompt:za:git` | `show-dirty` | boolean | `false` | Show dirty state |
+| `:prompt:za:git` | `show-untracked` | boolean | `false` | Show untracked files |
+| `:prompt:za:git` | `show-stash` | boolean | `false` | Show stash state |
+| `:prompt:za:git` | `show-upstream` | boolean | `false` | Show upstream state |
+| `:prompt:za:vimode` | `enable` | boolean | `false` | Enable vi mode indicator |
 
 ## Backward Compatibility
 
@@ -227,9 +227,9 @@ PROMPT_SIGN=">"
 PROMPT_USE_VIM_MODE=true
 
 # New style (recommended)
-zstyle ':prompt:minimal:path' style 'shortpath'
-zstyle ':prompt:minimal:sign' char '>'
-zstyle ':prompt:minimal:vimode' enable true
+zstyle ':prompt:za:path' style 'shortpath'
+zstyle ':prompt:za:sign' char '>'
+zstyle ':prompt:za:vimode' enable true
 ```
 
 ## License

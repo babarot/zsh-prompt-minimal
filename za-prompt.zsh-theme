@@ -16,7 +16,7 @@ __prompt_zstyle() {
     local default="$3"
     local result
 
-    zstyle -s ":prompt:minimal:${context}" "${key}" result || result="${default}"
+    zstyle -s ":prompt:za:${context}" "${key}" result || result="${default}"
     echo "${result}"
 }
 
@@ -27,27 +27,27 @@ __prompt_zstyle_bool() {
     local default="$3"
     local result
 
-    zstyle -t ":prompt:minimal:${context}" "${key}" 2>/dev/null && result="true" || result="${default}"
+    zstyle -t ":prompt:za:${context}" "${key}" 2>/dev/null && result="true" || result="${default}"
     echo "${result}"
 }
 
 # Set default zstyle values if not already set
-zstyle -s ':prompt:minimal:left' template _ || zstyle ':prompt:minimal:left' template '%sign% '
-zstyle -s ':prompt:minimal:right' template _ || zstyle ':prompt:minimal:right' template '%exitcode% %path% (%git%)'
-zstyle -s ':prompt:minimal:path' style _ || zstyle ':prompt:minimal:path' style 'minimal'
-zstyle -s ':prompt:minimal:sign' char _ || zstyle ':prompt:minimal:sign' char '$'
-zstyle -t ':prompt:minimal:vimode' enable 2>/dev/null || zstyle ':prompt:minimal:vimode' enable false
+zstyle -s ':prompt:za:left' template _ || zstyle ':prompt:za:left' template '%sign% '
+zstyle -s ':prompt:za:right' template _ || zstyle ':prompt:za:right' template '%exitcode% %path% (%git%)'
+zstyle -s ':prompt:za:path' style _ || zstyle ':prompt:za:path' style 'minimal'
+zstyle -s ':prompt:za:sign' char _ || zstyle ':prompt:za:sign' char '$'
+zstyle -t ':prompt:za:vimode' enable 2>/dev/null || zstyle ':prompt:za:vimode' enable false
 
 # Backward compatibility: support old environment variables
 # These will override zstyle if set
 if [[ -n "${PROMPT_PATH_STYLE}" ]]; then
-    zstyle ':prompt:minimal:path' style "${PROMPT_PATH_STYLE}"
+    zstyle ':prompt:za:path' style "${PROMPT_PATH_STYLE}"
 fi
 if [[ -n "${PROMPT_SIGN}" ]]; then
-    zstyle ':prompt:minimal:sign' char "${PROMPT_SIGN}"
+    zstyle ':prompt:za:sign' char "${PROMPT_SIGN}"
 fi
 if [[ -n "${PROMPT_USE_VIM_MODE}" ]] && [[ "${PROMPT_USE_VIM_MODE}" == "true" ]]; then
-    zstyle ':prompt:minimal:vimode' enable true
+    zstyle ':prompt:za:vimode' enable true
 fi
 
 __shorten_path() {
@@ -92,16 +92,16 @@ __prompt_git() {
     fi
 
     # Configure git-prompt.sh behavior from zstyle
-    if zstyle -t ':prompt:minimal:git' show-dirty 2>/dev/null; then
+    if zstyle -t ':prompt:za:git' show-dirty 2>/dev/null; then
         export GIT_PS1_SHOWDIRTYSTATE=1
     fi
-    if zstyle -t ':prompt:minimal:git' show-untracked 2>/dev/null; then
+    if zstyle -t ':prompt:za:git' show-untracked 2>/dev/null; then
         export GIT_PS1_SHOWUNTRACKEDFILES=1
     fi
-    if zstyle -t ':prompt:minimal:git' show-stash 2>/dev/null; then
+    if zstyle -t ':prompt:za:git' show-stash 2>/dev/null; then
         export GIT_PS1_SHOWSTASHSTATE=1
     fi
-    if zstyle -t ':prompt:minimal:git' show-upstream 2>/dev/null; then
+    if zstyle -t ':prompt:za:git' show-upstream 2>/dev/null; then
         export GIT_PS1_SHOWUPSTREAM="auto"
     fi
 
