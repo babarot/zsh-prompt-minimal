@@ -2,7 +2,10 @@
 
 ⚡ A fast, minimal, and highly customizable zsh prompt theme.
 
-Super fast, super minimal, and no dissatisfaction!
+<div align="center">
+<img src="demo.png">
+<p>Super fast, super minimal, and no dissatisfaction!</p>
+</div>
 
 ## Features
 
