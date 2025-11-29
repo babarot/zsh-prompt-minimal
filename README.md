@@ -216,11 +216,6 @@ zstyle ':prompt:minimal:git' show-upstream true
 | `:prompt:minimal:git` | `show-upstream` | boolean | `false` | Show upstream state |
 | `:prompt:minimal:vimode` | `enable` | boolean | `false` | Enable vi mode indicator |
 
-## Functions
-
-- `prompt-enable` - Enable the prompt (called automatically)
-- `prompt-disable` - Disable the right prompt
-
 ## Backward Compatibility
 
 The theme maintains backward compatibility with environment variables:

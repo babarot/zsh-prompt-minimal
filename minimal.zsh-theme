@@ -192,7 +192,12 @@ __prompt_parse_template() {
     echo "${result}"
 }
 
-prompt-enable() {
+__prompt_main() {
+    # Allow for functions in the prompt.
+    setopt PROMPT_SUBST
+    # Hide old prompt
+    setopt TRANSIENT_RPROMPT
+
     # Get templates from zstyle
     local left_template="$(__prompt_zstyle "left" "template" "%sign% ")"
     local right_template="$(__prompt_zstyle "right" "template" "%exitcode% %path% %git%")"
@@ -200,18 +205,6 @@ prompt-enable() {
     # Parse templates and set prompts
     PROMPT="$(__prompt_parse_template "${left_template}")"
     RPROMPT="$(__prompt_parse_template "${right_template}")"
-}
-
-prompt-disable() {
-    RPROMPT=
-}
-
-__prompt_main() {
-    # Allow for functions in the prompt.
-    setopt PROMPT_SUBST
-    # Hide old prompt
-    setopt TRANSIENT_RPROMPT
-    prompt-enable
 }
 
 __prompt_main
