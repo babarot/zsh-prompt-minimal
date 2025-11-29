@@ -98,6 +98,33 @@ zstyle ':prompt:za:sign' char '>'
 
 The theme includes git-prompt.sh for displaying git repository information.
 
+#### Why `git format` is needed
+
+The `git format` setting controls how git information is displayed, including brackets, parentheses, or any surrounding text. This is **essential** because:
+
+- **Outside git repositories**: When you're not in a git directory, the `%git%` placeholder returns nothing
+- **With `format`**: The entire format string (including brackets) disappears cleanly
+  ```
+  # Result: "exit_code path"  ✓ Clean!
+  ```
+- **Without `format`**: Empty brackets remain in your prompt
+  ```
+  # Result: "exit_code path ()"  ✗ Ugly!
+  ```
+
+**Example:**
+```zsh
+# Template: '%exitcode% %path% %git%'
+# With format ' (%s)':
+#   - In git repo: "exit_code path (main)"
+#   - Outside git:  "exit_code path"  ← brackets disappear!
+
+# Without format (putting brackets in template):
+# Template: '%exitcode% %path% (%git%)'
+#   - In git repo: "exit_code path (main)"
+#   - Outside git:  "exit_code path ()"  ← empty brackets remain!
+```
+
 #### Basic Git Configuration
 
 ```zsh
