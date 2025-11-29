@@ -63,7 +63,7 @@ Customize your prompt layout using templates with placeholders:
 
 ```zsh
 zstyle ':prompt:za:left' template '%sign% '
-zstyle ':prompt:za:right' template '%exitcode% %path% (%git%)'
+zstyle ':prompt:za:right' template '%exitcode% %path% %git%'
 ```
 
 #### Available Placeholders
@@ -101,10 +101,10 @@ The theme includes git-prompt.sh for displaying git repository information.
 #### Basic Git Configuration
 
 ```zsh
-# Customize git display in template (use any format you want)
-zstyle ':prompt:za:right' template '%exitcode% %path% [%git%]'
+# Change git format (brackets, parentheses, etc.)
+zstyle ':prompt:za:git' format ' [%s]'
 # or
-zstyle ':prompt:za:left' template '%git% %sign% '
+zstyle ':prompt:za:git' format ' (%s)'
 
 # Enable detailed git status
 zstyle ':prompt:za:git' show-dirty true
@@ -197,7 +197,8 @@ Color values can be:
 
 ```zsh
 zstyle ':prompt:za:left' template '%sign% '
-zstyle ':prompt:za:right' template '%exitcode% %F{blue}%path%%f %F{242}(%git%)%f'
+zstyle ':prompt:za:right' template '%exitcode% %F{blue}%path%%f %F{242}%git%%f'
+zstyle ':prompt:za:git' format ' (%s)'
 zstyle ':prompt:za:git' show-dirty true
 zstyle ':prompt:za:git' show-untracked true
 zstyle ':prompt:za:git' show-upstream true
@@ -210,9 +211,10 @@ zstyle ':prompt:za:git' show-upstream true
 | Context | Key | Type | Default | Description |
 |---------|-----|------|---------|-------------|
 | `:prompt:za:left` | `template` | string | `%sign% ` | Left prompt template |
-| `:prompt:za:right` | `template` | string | `%exitcode% %path% (%git%)` | Right prompt template |
+| `:prompt:za:right` | `template` | string | `%exitcode% %path% %git%` | Right prompt template |
 | `:prompt:za:path` | `style` | string | `minimal` | Path display style |
 | `:prompt:za:sign` | `char` | string | `$` | Prompt sign character |
+| `:prompt:za:git` | `format` | string | ` (%s)` | Git info format string |
 | `:prompt:za:git` | `show-dirty` | boolean | `false` | Show dirty state |
 | `:prompt:za:git` | `show-untracked` | boolean | `false` | Show untracked files |
 | `:prompt:za:git` | `show-stash` | boolean | `false` | Show stash state |

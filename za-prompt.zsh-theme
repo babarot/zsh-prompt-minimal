@@ -33,9 +33,10 @@ __prompt_zstyle_bool() {
 
 # Set default zstyle values if not already set
 zstyle -s ':prompt:za:left' template _ || zstyle ':prompt:za:left' template '%sign% '
-zstyle -s ':prompt:za:right' template _ || zstyle ':prompt:za:right' template '%exitcode% %path% (%git%)'
+zstyle -s ':prompt:za:right' template _ || zstyle ':prompt:za:right' template '%exitcode% %path% %git%'
 zstyle -s ':prompt:za:path' style _ || zstyle ':prompt:za:path' style 'minimal'
 zstyle -s ':prompt:za:sign' char _ || zstyle ':prompt:za:sign' char '$'
+zstyle -s ':prompt:za:git' format _ || zstyle ':prompt:za:git' format ' (%s)'
 zstyle -t ':prompt:za:vimode' enable 2>/dev/null || zstyle ':prompt:za:vimode' enable false
 
 # Backward compatibility: support old environment variables
@@ -105,8 +106,11 @@ __prompt_git() {
         export GIT_PS1_SHOWUPSTREAM="auto"
     fi
 
-    # Call __git_ps1 with %s only (formatting is done in template)
-    local git_info="$(__git_ps1 "%s")"
+    # Get git format from zstyle
+    local git_format="$(__prompt_zstyle "git" "format" " (%s)")"
+
+    # Call __git_ps1 with formatting
+    local git_info="$(__git_ps1 "${git_format}")"
     if [[ -n "${git_info}" ]]; then
         echo "${git_info}"
     fi
