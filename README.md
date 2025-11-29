@@ -248,22 +248,6 @@ zstyle ':prompt:za:git' show-upstream true
 | `:prompt:za:git` | `show-upstream` | boolean | `false` | Show upstream state |
 | `:prompt:za:vimode` | `enable` | boolean | `false` | Enable vi mode indicator |
 
-## Backward Compatibility
-
-The theme maintains backward compatibility with environment variables:
-
-```zsh
-# Old style (still supported)
-PROMPT_PATH_STYLE="shortpath"
-PROMPT_SIGN=">"
-PROMPT_USE_VIM_MODE=true
-
-# New style (recommended)
-zstyle ':prompt:za:path' style 'shortpath'
-zstyle ':prompt:za:sign' char '>'
-zstyle ':prompt:za:vimode' enable true
-```
-
 ## License
 
 MIT

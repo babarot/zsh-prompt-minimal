@@ -39,18 +39,6 @@ zstyle -s ':prompt:za:sign' char _ || zstyle ':prompt:za:sign' char '$'
 zstyle -s ':prompt:za:git' format _ || zstyle ':prompt:za:git' format ' (%s)'
 zstyle -t ':prompt:za:vimode' enable 2>/dev/null || zstyle ':prompt:za:vimode' enable false
 
-# Backward compatibility: support old environment variables
-# These will override zstyle if set
-if [[ -n "${PROMPT_PATH_STYLE}" ]]; then
-    zstyle ':prompt:za:path' style "${PROMPT_PATH_STYLE}"
-fi
-if [[ -n "${PROMPT_SIGN}" ]]; then
-    zstyle ':prompt:za:sign' char "${PROMPT_SIGN}"
-fi
-if [[ -n "${PROMPT_USE_VIM_MODE}" ]] && [[ "${PROMPT_USE_VIM_MODE}" == "true" ]]; then
-    zstyle ':prompt:za:vimode' enable true
-fi
-
 __shorten_path() {
     setopt localoptions noksharrays extendedglob
     local MATCH MBEGIN MEND
