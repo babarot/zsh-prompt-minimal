@@ -106,7 +106,7 @@ __prompt_git() {
 
 vim_mode_color=""
 
-function zle-keymap-select zle-line-init zle-line-finish {
+function zle-keymap-select zle-line-init {
     # https://tutorialmore.com/questions-292160.htm
     # https://unix.stackexchange.com/questions/547/make-my-zsh-prompt-show-mode-in-vi-mode
     case ${KEYMAP} in
@@ -137,7 +137,6 @@ function zle-keymap-select zle-line-init zle-line-finish {
 }
 
 zle -N zle-line-init
-zle -N zle-line-finish
 zle -N zle-keymap-select
 
 __vim_mode() {
