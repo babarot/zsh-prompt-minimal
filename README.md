@@ -94,6 +94,12 @@ Change the prompt character:
 zstyle ':prompt:za:sign' char '>'
 ```
 
+Show the sign in red when the last command exits with a non-zero status:
+
+```zsh
+zstyle ':prompt:za:sign' color-on-error true
+```
+
 ### Git Integration
 
 The theme includes git-prompt.sh for displaying git repository information.
@@ -240,6 +246,7 @@ zstyle ':prompt:za:git' show-upstream true
 | `:prompt:za:right` | `template` | string | `%exitcode% %path% %git%` | Right prompt template |
 | `:prompt:za:path` | `style` | string | `minimal` | Path display style |
 | `:prompt:za:sign` | `char` | string | `$` | Prompt sign character |
+| `:prompt:za:sign` | `color-on-error` | boolean | `false` | Show sign in red on non-zero exit |
 | `:prompt:za:git` | `format` | string | ` (%s)` | Git info format string |
 | `:prompt:za:git` | `show-dirty` | boolean | `false` | Show dirty state |
 | `:prompt:za:git` | `show-untracked` | boolean | `false` | Show untracked files |

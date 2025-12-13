@@ -158,6 +158,7 @@ __vim_mode() {
 __prompt_sign() {
     local sign="$(__prompt_zstyle "sign" "char" "$")"
     local vimode_enable="$(__prompt_zstyle_bool "vimode" "enable" "false")"
+    local color_on_error="$(__prompt_zstyle_bool "sign" "color-on-error" "false")"
 
     # Escape % character for prompt
     if [[ ${sign} == "%" ]]; then
@@ -171,12 +172,20 @@ __prompt_sign() {
             # In normal/visual/replace mode: use vim_mode_color
             echo "${vim_mode_color}${sign}${reset_prompt_color}"
         else
-            # In insert mode: show red on non-zero exit code
-            echo "%(?.${sign}.%F{red}${sign}%f)"
+            # In insert mode: show red on non-zero exit code if enabled
+            if [[ "${color_on_error}" == "true" ]]; then
+                echo "%(?.${sign}.%F{red}${sign}%f)"
+            else
+                echo "${sign}"
+            fi
         fi
     else
-        # vi mode disabled: show red on non-zero exit code
-        echo "%(?.${sign}.%F{red}${sign}%f)"
+        # vi mode disabled: show red on non-zero exit code if enabled
+        if [[ "${color_on_error}" == "true" ]]; then
+            echo "%(?.${sign}.%F{red}${sign}%f)"
+        else
+            echo "${sign}"
+        fi
     fi
 }
 
